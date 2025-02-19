@@ -42,7 +42,7 @@ namespace BucStop.Controllers
         public IActionResult GameCriteria()
         {
             return View();
-        }
+        } // Need to call to have form set up 
 
         //Takes the user to version 2.1 page
         public IActionResult TwoDotOne()
