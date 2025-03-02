@@ -70,18 +70,37 @@
 </form>
 
 <script>
-  // Function to handle form submission
+  // Used GitHub and prompteed 'edit the code to take only JS files inputs' using the code from the text box format perviously
+  // Function to handle JS file form submission
   document.getElementById('textForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form from submitting the traditional way
-    
-    // Get the text data from the textarea
-    const message = document.getElementById('message').value;
-    
-    // Error handling
-    if (!message) {
-      document.getElementById('errorMessages').textContent = 'Please enter a message.';
+  event.preventDefault(); // Prevent form from submitting the traditional way
+  
+  // Get the file from the input
+  const fileInput = document.getElementById('fileInput');
+  const file = fileInput.files[0];
+  
+  // Error handling
+  if (!file) {
+      document.getElementById('errorMessages').textContent = 'Please select a .js file.';
       return;
-    }
+  }
+  
+  // Check if the file is a .js file
+  if (file.type !== 'application/javascript' && file.name.split('.').pop() !== 'js') {
+      document.getElementById('errorMessages').textContent = 'Only .js files are allowed.';
+      return;
+  } else {
+      // Clear any previous error message
+      document.getElementById('errorMessages').textContent = '';
+  }
+    
+    // Process the file (you can read its content, upload it, or handle it further)
+    console.log('File submitted:', file.name);
+
+    // Optionally, you can reset the form after successful submission
+    document.getElementById('textForm').reset();
+  }); //end of JS file submission
+
 
   // Simulate a server response
     //const isSuccess = ; // 
