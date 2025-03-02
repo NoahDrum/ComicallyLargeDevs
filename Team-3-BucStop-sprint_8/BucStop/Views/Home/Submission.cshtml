@@ -27,6 +27,7 @@
     <button type="submit">Submit</button>
   </div>
   <div id="errorMessages" class="error"></div>
+  <div id="successMessages" class="success"></div>
 </form>
 
 <script>
@@ -43,12 +44,22 @@
       return;
     }
 
+
     // For now, we log the message data (you can send it to a server or database here later)
     console.log('Message Submitted:', message);
 
+    //Place holder for success variable
+    //const isSuccess;
+    if (isSuccess) {
+      document.getElementById('successMessages').textContent = 'Message submitted successfully!';
+      document.getElementById('errorMessages').textContent = '';
+    } else {
+      document.getElementById('errorMessages').textContent = 'Failed to submit the message. Please try again.';
+      document.getElementById('successMessages').textContent = '';
+    }
+
     // Optionally reset the form after submission
     document.getElementById('textForm').reset();
-    document.getElementById('errorMessages').textContent = '';
   });
 </script>
 
