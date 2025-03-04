@@ -54,52 +54,74 @@
 
 
 <!--Form stuff. Temporary text box submission for testing-->
-<h2>Submit Your Text Test</h2>
+<h2>Submit Your JS file</h2>
 
-<!-- The form will submit the text data only for now -->
-<form id="textForm" action="" method="POST">
-  <div>
-    <label for="message">Message:</label>
-    <textarea id="message" name="message" rows="5" required></textarea>
-  </div>
-  <div>
-    <button type="submit">Submit</button>
-  </div>
-  <div id="errorMessages" class="error"></div>
-  <div id="successMessages" class="success"></div>
+<!-- Used GitHub and prompteed 'edit the code to take only JS files inputs' using the code from the text box format perviously -->
+<!-- The form will submit JS files only -->
+<form id="textForm">
+  <!-- This should render as a file input box -->
+  <input type="file" id="fileInput" accept=".js" />
+  <button type="submit">Submit</button>
 </form>
 
 <script>
-  // Function to handle form submission
-  document.getElementById('textForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form from submitting the traditional way
+  // Function to handle JS file form submission
+  document.getElementById('textForm').addEventListener('submit', function(event) 
+   {
+      event.preventDefault(); // Prevent form from submitting the traditional way
     
-    // Get the text data from the textarea
-    const message = document.getElementById('message').value;
-    
-    // Error handling
-    if (!message) {
-      document.getElementById('errorMessages').textContent = 'Please enter a message.';
-      return;
-    }
+      // Get the file from the input
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      
+      // Error handling
+      if (!file) 
+      {
+          // If no file is selected, display an error message
+          document.getElementById('errorMessages').textContent = 'Please select a .js file.';
+          return;
+      }
+      
+      // Check if the file is a .js file
+      if (file.type !== 'application/javascript' && file.name.split('.').pop() !== 'js') 
+      {
+          // If the file is not a .js file, display an error message
+          document.getElementById('errorMessages').textContent = 'Only .js files are allowed.';
+          return;
+      } 
+      else 
+      {
+          // If the file is valid, clear any previous error message
+          document.getElementById('errorMessages').textContent = '';
+      }
+      
+      // Process the file (you can read its content, upload it, or handle it further)
+      console.log('File submitted:', file.name);
+      
+      // Optionally, you can reset the form after successful submission
+      document.getElementById('textForm').reset();
+      //end of JS file submission
 
-  // Simulate a server response
-    //const isSuccess = ; // 
+      // Simulate a server response
+      //const isSuccess = ; // 
 
-    if (isSuccess) {
-      document.getElementById('successMessages').textContent = 'Message submitted successfully!';
+      if (isSuccess) 
+      {
+        document.getElementById('successMessages').textContent = 'Message submitted successfully!';
+        document.getElementById('errorMessages').textContent = '';
+      } 
+      else 
+      {
+        document.getElementById('errorMessages').textContent = 'Failed to submit the message. Please try again.';
+        document.getElementById('successMessages').textContent = '';
+      }
+      // For now, we log the message data (you can send it to a server or database here)
+      console.log('Message Submitted:', message);
+
+      // Optionally reset the form after submission
+      document.getElementById('textForm').reset();
       document.getElementById('errorMessages').textContent = '';
-    } else {
-      document.getElementById('errorMessages').textContent = 'Failed to submit the message. Please try again.';
-      document.getElementById('successMessages').textContent = '';
-    }
-    // For now, we log the message data (you can send it to a server or database here)
-    console.log('Message Submitted:', message);
-
-    // Optionally reset the form after submission
-    document.getElementById('textForm').reset();
-    document.getElementById('errorMessages').textContent = '';
-  });
+    });
 </script>
 
 </body>
