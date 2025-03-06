@@ -64,6 +64,10 @@
   <button type="submit">Submit</button>
 </form>
 
+<!-- Display messages -->
+<p id="message" style="display: none; color: white;">Your game is under review</p>
+<p id="errorMessages" style="color: red;"></p>
+
 <script>
   // Function to handle JS file form submission
   document.getElementById('textForm').addEventListener('submit', function(event) 
@@ -97,6 +101,9 @@
       
       // Process the file (you can read its content, upload it, or handle it further)
       console.log('File submitted:', file.name);
+
+      // Show the message when the file is submitted
+      document.getElementById('message').style.display = 'block';
       
       // Optionally, you can reset the form after successful submission
       document.getElementById('textForm').reset();
