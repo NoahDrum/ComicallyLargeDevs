@@ -115,6 +115,26 @@
         return;
       }
 
+      // Read file content to check canvas size
+      const reader = new FileReader();
+      reader.onload = function(event) {
+          const scriptContent = event.target.result;
+
+          const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+)/g;
+          let match;
+          while ((match = canvasSizeRegex.exec(scriptContent)) !== null) {
+              if (parseInt(match[2], 10) > 640) {
+                  document.getElementById('errorMessages').textContent = `Canvas ${match[1]} cannot exceed 640px. Found: ${match[2]}px`;
+                  return;
+              }
+          }
+
+          document.getElementById('errorMessages').textContent = '';
+          document.getElementById('successMessages').textContent = 'File submitted successfully!';
+      };
+
+      reader.readAsText(file);
+
       
       // Process the file (you can read its content, upload it, or handle it further)
       console.log('File submitted:', file.name);
