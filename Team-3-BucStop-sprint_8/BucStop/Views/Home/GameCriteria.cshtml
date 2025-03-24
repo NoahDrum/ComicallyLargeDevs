@@ -98,6 +98,23 @@
           // If the file is valid, clear any previous error message
           document.getElementById('errorMessages').textContent = '';
       }
+
+      //Validate the file size to (max 10MB)
+      if (file.size > 10 * 1024 * 1024)
+      {
+        document.getElementById('errorMessages').textContent ='File size cannot exceed 10MB. '
+        return;
+      }
+
+      //Validate file name length (taking off the .js to not count towards total)
+      const fileNameWithoutExt = file.name.replace('.js','');
+      // if the file exceeds 50 characters throw an error
+      if(fileNameWithoutExt.length > 50)
+      {
+        document.getElementById('errorMessages').textContent='File name cannot exceed 50 characters'
+        return;
+      }
+
       
       // Process the file (you can read its content, upload it, or handle it further)
       console.log('File submitted:', file.name);
