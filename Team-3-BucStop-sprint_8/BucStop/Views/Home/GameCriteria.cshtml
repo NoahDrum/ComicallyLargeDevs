@@ -221,6 +221,7 @@
 
       let currentWidth = null;
       let currentHeight = null;
+      let canvasPass = true;  // Flag to track overall pass/fail for canvas size
 
       while ((match = canvasSizeRegex.exec(scriptContent)) !== null) {
         const dimension = match[1]; // 'width' or 'height'
@@ -235,12 +236,10 @@
           currentHeight = value;
         }
 
-        // Debugging comparison logic:
-        console.log(`Checking if ${dimension} = ${value} exceeds 640...`);
-
         // Check if the canvas dimension exceeds 640px
         if ((dimension === 'width' && value > 640) || (dimension === 'height' && value > 640)) {
           canvasErrors.push(`Canvas ${dimension} cannot exceed 640px. Found: ${value}px`);
+          canvasPass = false; // Mark as fail if any dimension exceeds 640px
         } else {
           canvasPassMessages.push(`Canvas ${dimension} is within the 640px limit. Found: ${value}px`);
         }
@@ -253,6 +252,9 @@
       if (currentWidth !== null && currentHeight !== null) {
         canvasPassMessages.push(`Current canvas size - Width: ${currentWidth}px, Height: ${currentHeight}px`);
       }
+
+      // Add canvas size pass/fail status to the criteria list
+      criteriaList.innerHTML += `<li class="${canvasPass ? 'pass' : 'fail'}">Canvas size validation: ${canvasPass ? 'Passed' : 'Failed'}</li>`;
 
       // If there are any canvas validation errors, display them and stop the process
       if (canvasErrors.length > 0) {
@@ -285,9 +287,6 @@
     reader.readAsText(file);
   });
 </script>
-
-
-
 
 </body>
 </html>
