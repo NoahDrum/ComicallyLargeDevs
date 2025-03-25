@@ -212,8 +212,8 @@
     reader.onload = function(event) {
       const scriptContent = event.target.result;
 
-      // Updated regex to capture canvas width and height assignments
-      const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+)\s*;/g;
+      // Regex to capture canvas width and height assignments
+      const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+);/g;
       let match;
       let canvasErrors = [];
       let canvasPassMessages = [];
@@ -248,7 +248,7 @@
         canvasSizeFeedback.push(`Canvas ${dimension} size: ${value}px`);
       }
 
-      // Add current canvas size to feedback if both width and height are found
+      // If both width and height are found, log their size
       if (currentWidth !== null && currentHeight !== null) {
         canvasPassMessages.push(`Current canvas size - Width: ${currentWidth}px, Height: ${currentHeight}px`);
       }
@@ -287,6 +287,7 @@
     reader.readAsText(file);
   });
 </script>
+
 
 </body>
 </html>
