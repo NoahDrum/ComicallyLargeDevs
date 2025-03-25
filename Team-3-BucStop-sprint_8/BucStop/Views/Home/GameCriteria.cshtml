@@ -98,6 +98,43 @@
           // If the file is valid, clear any previous error message
           document.getElementById('errorMessages').textContent = '';
       }
+
+      //Validate the file size to (max 10MB)
+      if (file.size > 10 * 1024 * 1024)
+      {
+        document.getElementById('errorMessages').textContent ='File size cannot exceed 10MB. '
+        return;
+      }
+
+      //Validate file name length (taking off the .js to not count towards total)
+      const fileNameWithoutExt = file.name.replace('.js','');
+      // if the file exceeds 50 characters throw an error
+      if(fileNameWithoutExt.length > 50)
+      {
+        document.getElementById('errorMessages').textContent='File name cannot exceed 50 characters'
+        return;
+      }
+
+      // Read file content to check canvas size
+      const reader = new FileReader();
+      reader.onload = function(event) {
+          const scriptContent = event.target.result;
+
+          const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+)/g;
+          let match;
+          while ((match = canvasSizeRegex.exec(scriptContent)) !== null) {
+              if (parseInt(match[2], 10) > 640) {
+                  document.getElementById('errorMessages').textContent = `Canvas ${match[1]} cannot exceed 640px. Found: ${match[2]}px`;
+                  return;
+              }
+          }
+
+          document.getElementById('errorMessages').textContent = '';
+          document.getElementById('successMessages').textContent = 'File submitted successfully!';
+      };
+
+      reader.readAsText(file);
+
       
       // Process the file (you can read its content, upload it, or handle it further)
       console.log('File submitted:', file.name);
