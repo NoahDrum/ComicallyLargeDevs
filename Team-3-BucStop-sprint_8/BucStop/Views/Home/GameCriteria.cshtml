@@ -91,7 +91,6 @@
 <ul>
     <li>Must have a name which is not offensive and is less than 50 characters long</li>
     <li>Must have controls which are able to be used on both PC and mobile</li>
-
         <ul>
             <li>Recommendation is to have it use the arrow keys, as the site will already map swipes to the keys</li>
         </ul>
@@ -212,8 +211,8 @@
     reader.onload = function(event) {
       const scriptContent = event.target.result;
 
-      // Regex to capture canvas width and height assignments
-      const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+);/g;
+      // Regex to capture canvas width and height assignments (no spaces around =)
+      const canvasSizeRegex = /canvas\.(width|height)=(\d+);/g;
       let match;
       let canvasErrors = [];
       let canvasPassMessages = [];
@@ -223,6 +222,7 @@
       let currentHeight = null;
       let canvasPass = true;  // Flag to track overall pass/fail for canvas size
 
+      // Loop through the script content to capture width/height assignments
       while ((match = canvasSizeRegex.exec(scriptContent)) !== null) {
         const dimension = match[1]; // 'width' or 'height'
         const value = parseInt(match[2], 10);
@@ -271,23 +271,13 @@
       // Always display the canvas size feedback (pass or fail)
       document.getElementById('successMessages').textContent += ' ' + canvasSizeFeedback.join(' ');
 
-      // If all tests pass, show success message and simulate file submission to EBS storage
-      document.getElementById('successMessages').textContent += ' File is ready to be submitted to future EBS storage.';
-
       // Temporary message for submission to EBS storage (simulation)
       document.getElementById('message').textContent = 'The file is successfully validated and will be submitted to EBS storage soon.';
-
-      // Optionally, you can log the file submission (simulate submission to EBS storage)
-      console.log('File ready for EBS storage submission:', file.name);
-
-      // Optionally, reset the form after successful submission
-      document.getElementById('textForm').reset();
     };
 
     reader.readAsText(file);
   });
 </script>
-
 
 </body>
 </html>
