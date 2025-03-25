@@ -217,12 +217,29 @@
       let canvasErrors = [];
       let canvasPassMessages = [];
 
+      let currentWidth = null;
+      let currentHeight = null;
+
       while ((match = canvasSizeRegex.exec(scriptContent)) !== null) {
-        if (parseInt(match[2], 10) > 640) {
-          canvasErrors.push(`Canvas ${match[1]} cannot exceed 640px. Found: ${match[2]}px`);
-        } else {
-          canvasPassMessages.push(`Canvas ${match[1]} is within the 640px limit. Found: ${match[2]}px`);
+        const dimension = match[1];
+        const value = parseInt(match[2], 10);
+
+        if (dimension === 'width') {
+          currentWidth = value;
+        } else if (dimension === 'height') {
+          currentHeight = value;
         }
+
+        if ((dimension === 'width' && value > 640) || (dimension === 'height' && value > 640)) {
+          canvasErrors.push(`Canvas ${dimension} cannot exceed 640px. Found: ${value}px`);
+        } else {
+          canvasPassMessages.push(`Canvas ${dimension} is within the 640px limit. Found: ${value}px`);
+        }
+      }
+
+      // Add current canvas size to feedback
+      if (currentWidth !== null && currentHeight !== null) {
+        canvasPassMessages.push(`Current canvas size - Width: ${currentWidth}px, Height: ${currentHeight}px`);
       }
 
       // If there are any canvas validation errors, display them and stop the process
