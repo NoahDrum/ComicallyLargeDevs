@@ -213,7 +213,7 @@
       const scriptContent = event.target.result;
 
       // Updated regex to capture canvas width and height assignments in the form of canvas.width = <value>;
-      const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+);/g;
+      const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+)\s*;/g;
       let match;
       let canvasErrors = [];
       let canvasPassMessages = [];
@@ -226,6 +226,7 @@
         const dimension = match[1]; // 'width' or 'height'
         const value = parseInt(match[2], 10);
 
+        // Capture width and height values
         if (dimension === 'width') {
           currentWidth = value;
         } else if (dimension === 'height') {
@@ -279,6 +280,7 @@
     reader.readAsText(file);
   });
 </script>
+
 
 
 </body>
