@@ -212,7 +212,7 @@
     reader.onload = function(event) {
       const scriptContent = event.target.result;
 
-      // Updated regex to capture canvas width and height assignments in the form of canvas.width = <value>;
+      // Updated regex to capture canvas width and height assignments
       const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+)\s*;/g;
       let match;
       let canvasErrors = [];
@@ -226,12 +226,17 @@
         const dimension = match[1]; // 'width' or 'height'
         const value = parseInt(match[2], 10);
 
+        console.log(`Captured canvas ${dimension}: ${value}`); // Debugging log
+
         // Capture width and height values
         if (dimension === 'width') {
           currentWidth = value;
         } else if (dimension === 'height') {
           currentHeight = value;
         }
+
+        // Debugging comparison logic:
+        console.log(`Checking if ${dimension} = ${value} exceeds 640...`);
 
         // Check if the canvas dimension exceeds 640px
         if ((dimension === 'width' && value > 640) || (dimension === 'height' && value > 640)) {
@@ -280,6 +285,7 @@
     reader.readAsText(file);
   });
 </script>
+
 
 
 
