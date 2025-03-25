@@ -212,16 +212,18 @@
     reader.onload = function(event) {
       const scriptContent = event.target.result;
 
-      const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+)/g;
+      // Updated regex to capture canvas width and height assignments in the form of canvas.width = <value>;
+      const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+);/g;
       let match;
       let canvasErrors = [];
       let canvasPassMessages = [];
+      let canvasSizeFeedback = [];
 
       let currentWidth = null;
       let currentHeight = null;
 
       while ((match = canvasSizeRegex.exec(scriptContent)) !== null) {
-        const dimension = match[1];
+        const dimension = match[1]; // 'width' or 'height'
         const value = parseInt(match[2], 10);
 
         if (dimension === 'width') {
@@ -230,14 +232,18 @@
           currentHeight = value;
         }
 
+        // Check if the canvas dimension exceeds 640px
         if ((dimension === 'width' && value > 640) || (dimension === 'height' && value > 640)) {
           canvasErrors.push(`Canvas ${dimension} cannot exceed 640px. Found: ${value}px`);
         } else {
           canvasPassMessages.push(`Canvas ${dimension} is within the 640px limit. Found: ${value}px`);
         }
+
+        // Collect feedback for both pass and fail scenarios
+        canvasSizeFeedback.push(`Canvas ${dimension} size: ${value}px`);
       }
 
-      // Add current canvas size to feedback
+      // Add current canvas size to feedback if both width and height are found
       if (currentWidth !== null && currentHeight !== null) {
         canvasPassMessages.push(`Current canvas size - Width: ${currentWidth}px, Height: ${currentHeight}px`);
       }
@@ -253,6 +259,9 @@
       if (canvasPassMessages.length > 0) {
         document.getElementById('successMessages').textContent += ' ' + canvasPassMessages.join(' ');
       }
+
+      // Always display the canvas size feedback (pass or fail)
+      document.getElementById('successMessages').textContent += ' ' + canvasSizeFeedback.join(' ');
 
       // If all tests pass, show success message and simulate file submission to EBS storage
       document.getElementById('successMessages').textContent += ' File is ready to be submitted to future EBS storage.';
@@ -270,6 +279,7 @@
     reader.readAsText(file);
   });
 </script>
+
 
 </body>
 </html>
