@@ -1,9 +1,8 @@
-
-﻿@{
+@{
     ViewData["Title"] = "Game Criteria";
 }
 
-<!--Inserted HTML-->
+<!-- Inserted HTML -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,13 +10,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Submission Form</title>
 
-  <!-- Link to an external CSS file -->
-  <link rel="stylesheet" href="Form.css">
-  
+  <!-- Inline CSS -->
+  <style>
+    /* Style for the file submission form */
+    form {
+      margin: 20px;
+      padding: 20px;
+      border: 2px solid #ccc;
+      display: flex;
+      flex-direction: column;
+      max-width: 300px;
+    }
+
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    /* Style for the criteria list */
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      font-size: 16px;
+      padding: 5px;
+    }
+
+    .pass {
+      color: green;
+    }
+
+    .fail {
+      color: red;
+    }
+
+    /* Style for the messages */
+    #errorMessages {
+      color: red;
+      font-weight: bold;
+    }
+
+    #successMessages {
+      color: green;
+      font-weight: bold;
+    }
+
+    /* Message indicating the game is under review */
+    #message {
+      display: none;
+      color: white;
+      background-color: #333;
+      padding: 10px;
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-<!-- Page detailing what criteria a game should meet to be added to the site.-->
+<!-- Page detailing what criteria a game should meet to be added to the site. -->
 
 <h1>@ViewData["Title"]</h1>
 
@@ -51,12 +116,9 @@
 <hr>
 <h1>Add your game</h1>
 
-
-
-<!--Form stuff. Temporary text box submission for testing-->
+<!-- Form stuff. Temporary text box submission for testing -->
 <h2>Submit Your JS file</h2>
 
-<!-- Used ChatGTP and prompted 'edit the code to take only JS files inputs' using the code from the text box format perviously -->
 <!-- The form will submit JS files only -->
 <form id="textForm">
   <!-- This should render as a file input box -->
@@ -67,6 +129,9 @@
 <!-- Display messages -->
 <p id="message" style="display: none; color: white;">Your game is under review</p>
 <p id="errorMessages" style="color: red;"></p>
+
+<!-- Criteria List (Where pass/fail results will show) -->
+<ul id="criteriaList"></ul>
 
 <script>
   // Function to handle JS file form submission
@@ -93,6 +158,7 @@
     } else {
       successMessages.push('File selected successfully.');
     }
+    // Add the result to the criteria list (pass or fail)
     criteriaList.innerHTML += `<li class="${fileSelected ? 'pass' : 'fail'}">File selected: ${fileSelected ? 'Passed' : 'Failed'}</li>`;
 
     // Check if the file is a .js file
@@ -103,6 +169,7 @@
     } else {
       successMessages.push('File is a valid .js file.');
     }
+    // Add the result to the criteria list (pass or fail)
     criteriaList.innerHTML += `<li class="${isValidJs ? 'pass' : 'fail'}">File type is .js: ${isValidJs ? 'Passed' : 'Failed'}</li>`;
 
     // Validate the file size (max 10MB)
@@ -113,6 +180,7 @@
     } else if (file) {
       successMessages.push('File size is within the 10MB limit.');
     }
+    // Add the result to the criteria list (pass or fail)
     criteriaList.innerHTML += `<li class="${isSizeValid ? 'pass' : 'fail'}">File size within limit: ${isSizeValid ? 'Passed' : 'Failed'}</li>`;
 
     // Validate file name length (taking off the .js to not count towards total)
@@ -126,6 +194,7 @@
         successMessages.push('File name length is within the 50 character limit.');
       }
     }
+    // Add the result to the criteria list (pass or fail)
     criteriaList.innerHTML += `<li class="${isFileNameValid ? 'pass' : 'fail'}">File name length valid: ${isFileNameValid ? 'Passed' : 'Failed'}</li>`;
 
     // If there are any errors, display them and stop the process
