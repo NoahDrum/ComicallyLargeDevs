@@ -81,41 +81,52 @@
     let errorMessages = [];
     let successMessages = [];
 
+    // Select the criteria elements to display feedback
+    const criteriaList = document.getElementById('criteriaList');
+    criteriaList.innerHTML = ''; // Clear previous messages
+
+    // Check if a file is selected
+    let fileSelected = true;
     if (!file) {
-      // If no file is selected, display an error message
+      fileSelected = false;
       errorMessages.push('Please select a .js file.');
     } else {
-      // If a file is selected, return a success message
       successMessages.push('File selected successfully.');
     }
-    
+    criteriaList.innerHTML += `<li class="${fileSelected ? 'pass' : 'fail'}">File selected: ${fileSelected ? 'Passed' : 'Failed'}</li>`;
+
     // Check if the file is a .js file
+    let isValidJs = true;
     if (file && (file.type !== 'application/javascript' && file.name.split('.').pop() !== 'js')) {
-      // If the file is not a .js file, display an error message
+      isValidJs = false;
       errorMessages.push('Only .js files are allowed.');
     } else {
-      // If the file is a .js file, return a success message
       successMessages.push('File is a valid .js file.');
     }
+    criteriaList.innerHTML += `<li class="${isValidJs ? 'pass' : 'fail'}">File type is .js: ${isValidJs ? 'Passed' : 'Failed'}</li>`;
 
     // Validate the file size (max 10MB)
+    let isSizeValid = true;
     if (file && file.size > 10 * 1024 * 1024) {
+      isSizeValid = false;
       errorMessages.push('File size cannot exceed 10MB.');
     } else if (file) {
-      // If the file is within size limit, return a success message
       successMessages.push('File size is within the 10MB limit.');
     }
+    criteriaList.innerHTML += `<li class="${isSizeValid ? 'pass' : 'fail'}">File size within limit: ${isSizeValid ? 'Passed' : 'Failed'}</li>`;
 
     // Validate file name length (taking off the .js to not count towards total)
+    let isFileNameValid = true;
     if (file) {
       const fileNameWithoutExt = file.name.replace('.js', '');
       if (fileNameWithoutExt.length > 50) {
+        isFileNameValid = false;
         errorMessages.push('File name cannot exceed 50 characters.');
       } else {
-        // If file name length is valid, return a success message
         successMessages.push('File name length is within the 50 character limit.');
       }
     }
+    criteriaList.innerHTML += `<li class="${isFileNameValid ? 'pass' : 'fail'}">File name length valid: ${isFileNameValid ? 'Passed' : 'Failed'}</li>`;
 
     // If there are any errors, display them and stop the process
     if (errorMessages.length > 0) {
@@ -173,8 +184,6 @@
     reader.readAsText(file);
   });
 </script>
-
-
 
 </body>
 </html>
