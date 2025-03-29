@@ -1,9 +1,8 @@
-
-﻿@{
+@{
     ViewData["Title"] = "Game Criteria";
 }
 
-<!--Inserted HTML-->
+<!-- Inserted HTML -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,13 +10,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Submission Form</title>
 
+<<<<<<< Updated upstream
+  <!-- Inline CSS -->
+  <style>
+    /* Style for the file submission form */
+    form {
+      margin: 20px;
+      padding: 20px;
+      border: 2px solid #ccc;
+      display: flex;
+      flex-direction: column;
+      max-width: 300px;
+    }
+
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    /* Style for the criteria list */
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      font-size: 16px;
+      padding: 5px;
+    }
+
+    .pass {
+      color: green;
+    }
+
+    .fail {
+      color: red;
+    }
+
+    /* Style for the messages */
+    #errorMessages {
+      color: red;
+      font-weight: bold;
+    }
+
+    #successMessages {
+      color: green;
+      font-weight: bold;
+    }
+
+    /* Message indicating the game is under review */
+    #message {
+      display: none;
+      color: white;
+      background-color: #333;
+      padding: 10px;
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+    }
+  </style>
+=======
   <!-- Link to an external CSS file -->
-  <link rel="stylesheet" href="Form.css">
+  <link rel="stylesheet" href="site.css">
   
+>>>>>>> Stashed changes
 </head>
 <body>
 
-<!-- Page detailing what criteria a game should meet to be added to the site.-->
+<!-- Page detailing what criteria a game should meet to be added to the site. -->
 
 <h1>@ViewData["Title"]</h1>
 
@@ -26,7 +97,6 @@
 <ul>
     <li>Must have a name which is not offensive and is less than 50 characters long</li>
     <li>Must have controls which are able to be used on both PC and mobile</li>
-
         <ul>
             <li>Recommendation is to have it use the arrow keys, as the site will already map swipes to the keys</li>
         </ul>
@@ -51,12 +121,9 @@
 <hr>
 <h1>Add your game</h1>
 
-
-
-<!--Form stuff. Temporary text box submission for testing-->
+<!-- Form stuff. Temporary text box submission for testing -->
 <h2>Submit Your JS file</h2>
 
-<!-- Used GitHub and prompteed 'edit the code to take only JS files inputs' using the code from the text box format perviously -->
 <!-- The form will submit JS files only -->
 <form id="textForm">
   <!-- This should render as a file input box -->
@@ -68,104 +135,154 @@
 <p id="message" style="display: none; color: white;">Your game is under review</p>
 <p id="errorMessages" style="color: red;"></p>
 
+<!-- Criteria List (Where pass/fail results will show) -->
+<ul id="criteriaList"></ul>
+
 <script>
   // Function to handle JS file form submission
-  document.getElementById('textForm').addEventListener('submit', function(event) 
-   {
-      event.preventDefault(); // Prevent form from submitting the traditional way
+  document.getElementById('textForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form from submitting the traditional way
     
-      // Get the file from the input
-      const fileInput = document.getElementById('fileInput');
-      const file = fileInput.files[0];
-      
-      // Error handling
-      if (!file) 
-      {
-          // If no file is selected, display an error message
-          document.getElementById('errorMessages').textContent = 'Please select a .js file.';
-          return;
+    // Get the file from the input
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    
+    // Error handling
+    let errorMessages = [];
+    let successMessages = [];
+
+    // Select the criteria elements to display feedback
+    const criteriaList = document.getElementById('criteriaList');
+    criteriaList.innerHTML = ''; // Clear previous messages
+
+    // Check if a file is selected
+    let fileSelected = true;
+    if (!file) {
+      fileSelected = false;
+      errorMessages.push('Please select a .js file.');
+    } else {
+      successMessages.push('File selected successfully.');
+    }
+    // Add the result to the criteria list (pass or fail)
+    criteriaList.innerHTML += `<li class="${fileSelected ? 'pass' : 'fail'}">File selected: ${fileSelected ? 'Passed' : 'Failed'}</li>`;
+
+    // Check if the file is a .js file
+    let isValidJs = true;
+    if (file && (file.type !== 'application/javascript' && file.name.split('.').pop() !== 'js')) {
+      isValidJs = false;
+      errorMessages.push('Only .js files are allowed.');
+    } else {
+      successMessages.push('File is a valid .js file.');
+    }
+    // Add the result to the criteria list (pass or fail)
+    criteriaList.innerHTML += `<li class="${isValidJs ? 'pass' : 'fail'}">File type is .js: ${isValidJs ? 'Passed' : 'Failed'}</li>`;
+
+    // Validate the file size (max 10MB)
+    let isSizeValid = true;
+    if (file && file.size > 10 * 1024 * 1024) {
+      isSizeValid = false;
+      errorMessages.push('File size cannot exceed 10MB.');
+    } else if (file) {
+      successMessages.push('File size is within the 10MB limit.');
+    }
+    // Add the result to the criteria list (pass or fail)
+    criteriaList.innerHTML += `<li class="${isSizeValid ? 'pass' : 'fail'}">File size within limit: ${isSizeValid ? 'Passed' : 'Failed'}</li>`;
+
+    // Validate file name length (taking off the .js to not count towards total)
+    let isFileNameValid = true;
+    if (file) {
+      const fileNameWithoutExt = file.name.replace('.js', '');
+      if (fileNameWithoutExt.length > 50) {
+        isFileNameValid = false;
+        errorMessages.push('File name cannot exceed 50 characters.');
+      } else {
+        successMessages.push('File name length is within the 50 character limit.');
       }
-      
-      // Check if the file is a .js file
-      if (file.type !== 'application/javascript' && file.name.split('.').pop() !== 'js') 
-      {
-          // If the file is not a .js file, display an error message
-          document.getElementById('errorMessages').textContent = 'Only .js files are allowed.';
-          return;
-      } 
-      else 
-      {
-          // If the file is valid, clear any previous error message
-          document.getElementById('errorMessages').textContent = '';
+    }
+    // Add the result to the criteria list (pass or fail)
+    criteriaList.innerHTML += `<li class="${isFileNameValid ? 'pass' : 'fail'}">File name length valid: ${isFileNameValid ? 'Passed' : 'Failed'}</li>`;
+
+    // If there are any errors, display them and stop the process
+    if (errorMessages.length > 0) {
+      document.getElementById('errorMessages').textContent = errorMessages.join(' ');
+      document.getElementById('successMessages').textContent = '';
+      return; // Do not proceed with the submission
+    }
+
+    // If there are any success messages, display them
+    document.getElementById('successMessages').textContent = successMessages.join(' ');
+
+    // Read file content to check canvas size
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const scriptContent = event.target.result;
+
+      // Regex to capture canvas width and height assignments (no spaces around =)
+      const canvasSizeRegex = /canvas\.(width|height)=(\d+);/g;
+      let match;
+      let canvasErrors = [];
+      let canvasPassMessages = [];
+      let canvasSizeFeedback = [];
+
+      let currentWidth = null;
+      let currentHeight = null;
+      let canvasPass = true;  // Flag to track overall pass/fail for canvas size
+
+      // Loop through the script content to capture width/height assignments
+      while ((match = canvasSizeRegex.exec(scriptContent)) !== null) {
+        const dimension = match[1]; // 'width' or 'height'
+        const value = parseInt(match[2], 10);
+
+        console.log(`Captured canvas ${dimension}: ${value}`); // Debugging log
+
+        // Capture width and height values
+        if (dimension === 'width') {
+          currentWidth = value;
+        } else if (dimension === 'height') {
+          currentHeight = value;
+        }
+
+        // Check if the canvas dimension exceeds 640px
+        if ((dimension === 'width' && value > 640) || (dimension === 'height' && value > 640)) {
+          canvasErrors.push(`Canvas ${dimension} cannot exceed 640px. Found: ${value}px`);
+          canvasPass = false; // Mark as fail if any dimension exceeds 640px
+        } else {
+          canvasPassMessages.push(`Canvas ${dimension} is within the 640px limit. Found: ${value}px`);
+        }
+
+        // Collect feedback for both pass and fail scenarios
+        canvasSizeFeedback.push(`Canvas ${dimension} size: ${value}px`);
       }
 
-      //Validate the file size to (max 10MB)
-      if (file.size > 10 * 1024 * 1024)
-      {
-        document.getElementById('errorMessages').textContent ='File size cannot exceed 10MB. '
-        return;
+      // If both width and height are found, log their size
+      if (currentWidth !== null && currentHeight !== null) {
+        canvasPassMessages.push(`Current canvas size - Width: ${currentWidth}px, Height: ${currentHeight}px`);
       }
 
-      //Validate file name length (taking off the .js to not count towards total)
-      const fileNameWithoutExt = file.name.replace('.js','');
-      // if the file exceeds 50 characters throw an error
-      if(fileNameWithoutExt.length > 50)
-      {
-        document.getElementById('errorMessages').textContent='File name cannot exceed 50 characters'
-        return;
-      }
+      // Add canvas size pass/fail status to the criteria list
+      criteriaList.innerHTML += `<li class="${canvasPass ? 'pass' : 'fail'}">Canvas size validation: ${canvasPass ? 'Passed' : 'Failed'}</li>`;
 
-      // Read file content to check canvas size
-      const reader = new FileReader();
-      reader.onload = function(event) {
-          const scriptContent = event.target.result;
-
-          const canvasSizeRegex = /canvas\.(width|height)\s*=\s*(\d+)/g;
-          let match;
-          while ((match = canvasSizeRegex.exec(scriptContent)) !== null) {
-              if (parseInt(match[2], 10) > 640) {
-                  document.getElementById('errorMessages').textContent = `Canvas ${match[1]} cannot exceed 640px. Found: ${match[2]}px`;
-                  return;
-              }
-          }
-
-          document.getElementById('errorMessages').textContent = '';
-          document.getElementById('successMessages').textContent = 'File submitted successfully!';
-      };
-
-      reader.readAsText(file);
-
-      
-      // Process the file (you can read its content, upload it, or handle it further)
-      console.log('File submitted:', file.name);
-
-      // Show the message when the file is submitted
-      document.getElementById('message').style.display = 'block';
-      
-      // Optionally, you can reset the form after successful submission
-      document.getElementById('textForm').reset();
-      //end of JS file submission
-
-      // Simulate a server response
-      //const isSuccess = ; // 
-
-      if (isSuccess) 
-      {
-        document.getElementById('successMessages').textContent = 'Message submitted successfully!';
-        document.getElementById('errorMessages').textContent = '';
-      } 
-      else 
-      {
-        document.getElementById('errorMessages').textContent = 'Failed to submit the message. Please try again.';
+      // If there are any canvas validation errors, display them and stop the process
+      if (canvasErrors.length > 0) {
+        document.getElementById('errorMessages').textContent += ' ' + canvasErrors.join(' ');
         document.getElementById('successMessages').textContent = '';
+        return; // Do not proceed with the submission
       }
-      // For now, we log the message data (you can send it to a server or database here)
-      console.log('Message Submitted:', message);
 
-      // Optionally reset the form after submission
-      document.getElementById('textForm').reset();
-      document.getElementById('errorMessages').textContent = '';
-    });
+      // If there are any canvas pass messages, display them
+      if (canvasPassMessages.length > 0) {
+        document.getElementById('successMessages').textContent += ' ' + canvasPassMessages.join(' ');
+      }
+
+      // Always display the canvas size feedback (pass or fail)
+      document.getElementById('successMessages').textContent += ' ' + canvasSizeFeedback.join(' ');
+
+      // Temporary message for submission to EBS storage (simulation)
+      document.getElementById('message').textContent = 'The file is successfully validated and will be submitted to EBS storage soon.';
+    };
+
+    reader.readAsText(file);
+  });
 </script>
 
 </body>

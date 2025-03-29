@@ -20,9 +20,19 @@ body {
     background-size: cover;
 }
 
+@font-face {
+    font-family: "Bebas Neue";
+    src: url(/fonts/BebasNeue-Regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Great Vibes";
+    src: url(/fonts/GreatVibes-Regular.ttf) format("truetype");
+}
+
 /* Default font */
 html * {
-    font-family: "trebuc";
+    font-family: "Bebas Neue";
 }
 
 /* Default Colors */
