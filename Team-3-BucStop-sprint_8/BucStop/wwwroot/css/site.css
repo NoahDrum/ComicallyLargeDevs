@@ -20,16 +20,6 @@ body {
     background-size: cover;
 }
 
-@font-face {
-    font-family: "trebuc";
-    src: url(/fonts/trebuc.ttf) format("truetype");
-}
-
-@font-face {
-    font-family: "trebuc";
-    src: url(/fonts/trebuc.ttf) format("truetype");
-}
-
 /* Default font */
 html * {
     font-family: "trebuc";
