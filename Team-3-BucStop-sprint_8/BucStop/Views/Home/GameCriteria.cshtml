@@ -19,9 +19,14 @@
       margin: 20px;
       padding: 20px;
       border: 2px solid #ccc;
+      background-color: lightgray;
       display: flex;
       flex-direction: column;
       max-width: 300px;
+    }
+
+    p {
+      font-size: 20px;
     }
 
     input[type="file"] {
@@ -47,12 +52,12 @@
     }
 
     li {
-      font-size: 16px;
+      font-size: 20px;
       padding: 5px;
     }
 
     .pass {
-      color: green;
+      color: lightgreen;
     }
 
     .fail {
@@ -61,12 +66,14 @@
 
     /* Style for the messages */
     #errorMessages {
+      font-size: 20px;
       color: red;
       font-weight: bold;
     }
 
     #successMessages {
-      color: green;
+      font-size: 20px;
+      color: lightgreen;
       font-weight: bold;
     }
 
@@ -74,10 +81,9 @@
     #message {
       display: none;
       color: white;
-      background-color: #333;
       padding: 10px;
       margin-top: 20px;
-      font-size: 18px;
+      font-size: 20px;
       text-align: center;
     }
   </style>
@@ -128,16 +134,16 @@
   <h2>Submit Your JS file</h2>
 
   <!-- The form will submit JS files only -->
-  <form id="textForm">
+  <form id="textForm" style="background-color: lightgray;">
     <!-- This should render as a file input box -->
-    <input type="file" id="fileInput" accept=".js" />
-    <button type="submit">Submit</button>
+    <input type="file" id="fileInput" accept=".js" style="font-size: 20px;" />
+    <button type="submit" style="font-size: 20px;">Submit</button>
   </form>
 
   <!-- Display messages -->
   <p id="message" style="display: none; color: white;">Your game is under review</p>
   <p id="errorMessages" style="color: red;"></p>
-  <p id="successMessages" style="color: green;"></p>
+  <p id="successMessages" style="color: light green;"></p>
 
   <!-- Criteria List (Where pass/fail results will show) -->
   <ul id="criteriaList"></ul>
