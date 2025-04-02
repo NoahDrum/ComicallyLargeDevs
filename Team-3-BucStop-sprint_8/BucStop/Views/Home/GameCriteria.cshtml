@@ -19,14 +19,21 @@
       margin: 20px;
       padding: 20px;
       border: 2px solid #ccc;
-      background-color: lightgray;
+      /* background-color: lightgray;*/
       display: flex;
       flex-direction: column;
       max-width: 300px;
     }
 
+    .content {
+      background-color: rgba(255, 255, 255, 0.8); /* White with 80% opacity */
+      padding: 20px; 
+      color: #111344;
+    }
+
     p {
       font-size: 20px;
+      color: #111344;
     }
 
     input[type="file"] {
@@ -49,11 +56,13 @@
     ul {
       list-style-type: none;
       padding: 0;
+      color: #111344;
     }
 
     li {
       font-size: 20px;
       padding: 5px;
+      color: #111344;
     }
 
     .pass {
@@ -99,54 +108,75 @@
 
   <h1>@ViewData["Title"]</h1>
 
-  <p>In order to have your game listed on BucStop, your game needs to meet certain criteria: </p>
+    <hr>
+    <div class="content">
+      <div class="criteria-section">
+          <p>In order to have your game listed on BucStop, your game needs to meet certain criteria:</p>
+          
+          <hr>
 
-  <ul>
-    <li>Must have a name which is not offensive and is less than 50 characters long</li>
-    <li>Must have controls which are able to be used on both PC and mobile</li>
-    <ul>
-      <li>Recommendation is to have it use the arrow keys, as the site will already map swipes to the keys</li>
-    </ul>
-    <li>Must not contain any offensive material</li>
-    <ul>
-      <li>Offensive material: material which would give a negative impression of the school</li>
-      <ul>
-        <li>Including but not limited to: use of expletives, gore/excessive violence, use of controlled substances,
-          suggestive material, racially insensitive content, illegal material, et cetera</li>
-      </ul>
-    </ul>
+          <ul>
+              <li>Must have a name which is not offensive and is less than 50 characters long</li>
+              <li>Must have controls which are able to be used on both PC and mobile
+                  <ul>
+                      <li>Recommendation is to have it use the arrow keys, as the site will already map swipes to the keys</li>
+                  </ul>
+              </li>
+              <li>Must not contain any offensive material
+                  <ul>
+                      <li>Offensive material: material which would give a negative impression of the school
+                          <ul>
+                              <li>Including but not limited to: use of expletives, gore/excessive violence, use of controlled substances,
+                                  suggestive material, racially insensitive content, illegal material, et cetera</li>
+                          </ul>
+                      </li>
+                  </ul>
+              </li>
+              <li>Must be written in Javascript</li>
+              <li>Must not have advertisements</li>
+              <li>Must not contain any software which could be deemed as malicious</li>
+              <li>Must not contain excessive flashing lights or loud sounds</li>
+              <li>Must not infringe on any existing copyrighted material</li>
+              <li>The file size of the game and all other necessary materials (including images, sounds, et cetera) should not exceed 10MB</li>
+              <li>The canvas of the game must be within 640 px by 640 px</li>
+              <li>Must not collect user data outside of the bare minimum to save progress in the game</li>
+              <li>Any non-javascript files necessary for the game to run must be included in a folder</li>
+          </ul>
+      </div>
 
-    <li>Must be written in Javascript</li>
-    <li>Must not have advertisements</li>
-    <li>Must not contain any software which could be deemed as malicious</li>
-    <li>Must not contain excessive flashing lights or loud sounds</li>
-    <li>Must not infringe on any existing copyrighted material</li>
-    <li>The file size of the game and all other necessary materials (including images, sounds, et cetera) should not
-      exceed 10MB</li>
-    <li>The canvas of the game must be within 640 px by 640 px</li>
-    <li>Must not collect user data outside of the bare minimum to save progress in the game</li>
-    <li>Any non-javascript files necessary for the game to run must be included in a folder</li>
-  </ul>
-  <hr>
-  <h1>Add your game</h1>
+      <hr>
+    </div>
 
-  <!-- Form stuff. Temporary text box submission for testing -->
-  <h2>Submit Your JS file</h2>
+    <br>
 
-  <!-- The form will submit JS files only -->
-  <form id="textForm" style="background-color: lightgray;">
-    <!-- This should render as a file input box -->
-    <input type="file" id="fileInput" accept=".js" style="font-size: 20px;" />
-    <button type="submit" style="font-size: 20px;">Submit</button>
-  </form>
+    <h1>Add your game</h1>
+    <h2>Submit Your JS file</h2>
+    <hr>
 
-  <!-- Display messages -->
-  <p id="message" style="display: none; color: white;">Your game is under review</p>
-  <p id="errorMessages" style="color: red;"></p>
-  <p id="successMessages" style="color: light green;"></p>
+    <div class="content"> 
+      <div class="add-game-section">
+          <div class="form-section">
+              <!-- The form will submit JS files only -->
+              <form id="textForm" style="background-color: lightgray;">
+                  <!-- This should render as a file input box -->
+                  <input type="file" id="fileInput" accept=".js" style="font-size: 20px;" />
+                  <button type="submit" style="font-size: 20px;">Submit</button>
+              </form>
+          </div>
 
-  <!-- Criteria List (Where pass/fail results will show) -->
-  <ul id="criteriaList"></ul>
+          <div class="message-section">
+              <!-- Display messages -->
+              <p id="message" style="display: none; color: white;">Your game is under review</p>
+              <p id="errorMessages" style="color: red;"></p>
+              <p id="successMessages" style="color: lightgreen;"></p>
+          </div>
+
+          <div class="criteria-list-section">
+              <!-- Criteria List (Where pass/fail results will show) -->
+              <ul id="criteriaList"></ul>
+          </div>
+      </div>
+  </div>
 
   <script>
     // Function to handle JS file form submission
