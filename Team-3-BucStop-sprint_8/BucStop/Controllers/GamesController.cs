@@ -96,5 +96,43 @@ namespace BucStop.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("Games/UploadGame")]
+        public async Task<IActionResult> UploadGame([FromForm] IFormFile gameFile)
+        {
+            Console.WriteLine("DEBUG: UploadGame endpoint hit.");
+
+            if (gameFile == null || gameFile.Length == 0)
+            {
+                Console.WriteLine("DEBUG: No file received.");
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                return BadRequest("No file uploaded.");
+            }
+
+            var uploadsPath = "/mnt/ebs-storage";
+            Directory.CreateDirectory(uploadsPath);
+            var filePath = Path.Combine(uploadsPath, Path.GetFileName(gameFile.FileName));
+
+            try
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await gameFile.CopyToAsync(stream);
+                }
+
+                Console.WriteLine($"DEBUG: File saved to {filePath}");
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                return Json(new { message = "File uploaded successfully!" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("UPLOAD ERROR: " + ex.Message);
+                Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                return StatusCode(500, $"Upload failed: {ex.Message}");
+            }
+        }
+
     }
 }
