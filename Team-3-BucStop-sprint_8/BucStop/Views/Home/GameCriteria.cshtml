@@ -157,7 +157,7 @@
       <div class="add-game-section">
           <div class="form-section">
               <!-- The form will submit JS files only -->
-              <form id="textForm" style="background-color: lightgray;">
+              <form id="textForm" enctype="multipart/form-data" style="background-color: lightgray;">
                   <!-- This should render as a file input box -->
                   <input type="file" id="fileInput" accept=".js" style="font-size: 20px;" />
                   <button type="submit" style="font-size: 20px;">Submit</button>
@@ -324,6 +324,44 @@
       };
 
       reader.readAsText(file);
+    });
+  </script>
+  <script>
+    document.getElementById('textForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+      const errorElement = document.getElementById('errorMessages');
+      const messageElement = document.getElementById('message');
+
+      if (!file || file.size > 10 * 1024 * 1024 || file.name.length > 54) {
+        errorElement.textContent = "File invalid (size, name, or type).";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("gameFile", file);
+
+      try {
+        const response = await fetch("https://torntiugo2.execute-api.us-east-2.amazonaws.com/prod/Games", {
+          method: "POST",
+          body: formData
+        });
+
+        const text = await response.text();
+        if (response.ok) {
+          messageElement.style.display = "block";
+          errorElement.textContent = "";
+          errorElement.style.display = "none";
+        } else {
+          throw new Error(text || "Upload failed");
+        }
+      } catch (error) {
+        errorElement.style.display = "block";
+        errorElement.textContent = "Upload failed: " + error.message;
+        console.error("Upload error:", error.message);
+      }
     });
   </script>
 
