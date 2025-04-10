@@ -157,6 +157,7 @@
       <div class="add-game-section">
           <div class="form-section">
               <!-- The form will submit JS files only -->
+              <!-- Changed to allow for files to be uploaded -->
               <form id="textForm" enctype="multipart/form-data" style="background-color: lightgray;">
                   <!-- This should render as a file input box -->
                   <input type="file" id="fileInput" accept=".js" style="font-size: 20px;" />
@@ -344,11 +345,13 @@
       formData.append("gameFile", file);
 
       try {
+        // Gave the fetch command to have the invoke url of the API gateway
         const response = await fetch("https://torntiugo2.execute-api.us-east-2.amazonaws.com/prod/Games", {
           method: "POST",
           body: formData
         });
 
+        //De-bug lines used to see where the issues were happeneing. Left in for possible future logging
         const text = await response.text();
         if (response.ok) {
           messageElement.style.display = "block";

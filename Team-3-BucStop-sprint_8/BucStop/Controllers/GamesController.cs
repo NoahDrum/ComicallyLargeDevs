@@ -97,13 +97,19 @@ namespace BucStop.Controllers
             return View();
         }
 
+        // NEW METHOD ADDED
+        //Used to get past some permissions errors, allows un-signed in users to access
         [AllowAnonymous]
+        //Method for POST requests
         [HttpPost]
+        //The route is "Games/UploadGame"
         [Route("Games/UploadGame")]
         public async Task<IActionResult> UploadGame([FromForm] IFormFile gameFile)
         {
+            //Debug line meaning we have hit the endpoint
             Console.WriteLine("DEBUG: UploadGame endpoint hit.");
 
+            //Make sure its not an empty file
             if (gameFile == null || gameFile.Length == 0)
             {
                 Console.WriteLine("DEBUG: No file received.");
@@ -111,23 +117,32 @@ namespace BucStop.Controllers
                 return BadRequest("No file uploaded.");
             }
 
+            //Gives the storage path for files
             var uploadsPath = "/mnt/ebs-storage";
+            //If the upload path doesn't exist, it creates it
             Directory.CreateDirectory(uploadsPath);
+            //Making the full file path
             var filePath = Path.Combine(uploadsPath, Path.GetFileName(gameFile.FileName));
 
             try
             {
+                //Creates a new file and filestream
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
+                    //Copies the file to the stream
                     await gameFile.CopyToAsync(stream);
                 }
 
+                //Debug line to show where the file has been saved
                 Console.WriteLine($"DEBUG: File saved to {filePath}");
+                //CORS header for successful response
                 Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                //Success message
                 return Json(new { message = "File uploaded successfully!" });
             }
             catch (Exception ex)
             {
+                //EXCEPTION FOR IF IT DOESN'T WORK
                 Console.WriteLine("UPLOAD ERROR: " + ex.Message);
                 Response.Headers.Add("Access-Control-Allow-Origin", "*");
                 return StatusCode(500, $"Upload failed: {ex.Message}");
